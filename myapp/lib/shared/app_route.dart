@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:myapp/screens/login/login_screen.dart';
+import 'package:myapp/views/login/login_screen.dart';
 
 enum AppRoute {
   login,

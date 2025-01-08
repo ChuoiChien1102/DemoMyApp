@@ -12,10 +12,9 @@ part 'app_service.g.dart';
 abstract class AppService {
   factory AppService(Dio dio, {String? baseUrl}) = _AppService;
 
-  //sign in
-  @GET('/api/admin/auth/public/login')
-  Future<HttpResponse<BaseResponse<User>>> getUsers();
-
+  //login
+  @POST('/api/admin/auth/public/login')
+  Future<HttpResponse<BaseResponse<User>>> login(@Body() Map<String, dynamic> map);
   static AppService create() {
     final dio = NetworkManager().createDio()
       ..interceptors

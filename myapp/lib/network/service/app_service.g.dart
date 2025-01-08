@@ -22,13 +22,15 @@ class _AppService implements AppService {
   final ParseErrorLogger? errorLogger;
 
   @override
-  Future<HttpResponse<BaseResponse<User>>> getUsers() async {
+  Future<HttpResponse<BaseResponse<User>>> login(
+      Map<String, dynamic> map) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    const Map<String, dynamic>? _data = null;
+    final _data = <String, dynamic>{};
+    _data.addAll(map);
     final _options = _setStreamType<HttpResponse<BaseResponse<User>>>(Options(
-      method: 'GET',
+      method: 'POST',
       headers: _headers,
       extra: _extra,
     )
