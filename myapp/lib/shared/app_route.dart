@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:myapp/view_models/login_cubit.dart';
 import 'package:myapp/views/login/login_screen.dart';
 
 enum AppRoute {
@@ -31,7 +32,7 @@ extension AppRouteExt on AppRoute {
         return GetPageRoute(
           settings: settings,
           page: () => const LoginScreen(),
-          bindings: [],
+          bindings: [BindingsBuilder.put(()=> LoginCubit(Get.find()))],
         );
       default:
         return GetPageRoute(
