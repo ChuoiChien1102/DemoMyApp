@@ -1,9 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:myapp/constant/app_colors.dart';
 
 class AppThemeData with Diagnosticable {
   AppThemeData();
-
+  late TextStyle header;
+  late TextStyle title1;
   late TextStyle text_24_700;
   late TextStyle text_22_500;
   late TextStyle text_21_700;
@@ -50,6 +52,16 @@ class AppThemeData with Diagnosticable {
   factory AppThemeData.fromContext(BuildContext context) {
     // final ThemeData themeData = Theme.of(context);
     final AppThemeData theme = AppThemeData();
+
+    theme.header = const TextStyle(
+      fontFamily: 'NunitoSans',
+      fontWeight: FontWeight.w700,
+      fontStyle: FontStyle.normal,
+      fontSize: 20.0,
+      color: AppColors.textGreyDark,
+    );
+
+    theme.title1 = theme.header.copyWith(fontSize: 16.0);
 
     theme.text_20_600 = const TextStyle(
       fontFamily: 'SVN-Gilroy',
@@ -128,6 +140,8 @@ class AppThemeData with Diagnosticable {
     }
 
     return other is AppThemeData &&
+        other.header == header &&
+        other.title1 == title1 &&
         other.text_20_600 == text_20_600 &&
         other.text_16_500 == text_16_500 &&
         other.text_16_400 == text_16_400 &&
@@ -148,6 +162,8 @@ class AppThemeData with Diagnosticable {
 
   @override
   int get hashCode => Object.hashAll([
+        header,
+        title1,
         text_20_600,
         text_16_500,
         text_16_400,

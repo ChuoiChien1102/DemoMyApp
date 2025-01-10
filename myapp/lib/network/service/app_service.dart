@@ -1,5 +1,6 @@
 
 import 'package:dio/dio.dart';
+import 'package:myapp/models/event.dart';
 import 'package:myapp/models/user.dart';
 import 'package:myapp/network/base/base_response.dart';
 import 'package:myapp/network/core/network_manager.dart';
@@ -15,6 +16,10 @@ abstract class AppService {
   //login
   @POST('/api/admin/auth/public/login')
   Future<HttpResponse<BaseResponse<User>>> login(@Body() Map<String, dynamic> map);
+
+  @GET('/api/admin/event/list')
+  Future<HttpResponse<BaseResponse<List<Event>>>> getListEvent();
+
   static AppService create() {
     final dio = NetworkManager().createDio()
       ..interceptors

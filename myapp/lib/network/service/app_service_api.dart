@@ -1,4 +1,5 @@
 
+import 'package:myapp/models/event.dart';
 import 'package:myapp/models/user.dart';
 import 'package:myapp/network/base/base_response.dart';
 import 'package:myapp/network/repository/app_repository.dart';
@@ -17,6 +18,15 @@ class AppServiceApi implements AppRepository {
       'password': p_password,
     };
     final response = service.login(param).then((httpReponse) {
+      return httpReponse.data;
+    });
+    return response;
+  }
+
+  @override
+  Future<BaseResponse<List<Event>>> getListEvent() {
+    // TODO: implement getListEvent
+    final response = service.getListEvent().then((httpReponse) {
       return httpReponse.data;
     });
     return response;

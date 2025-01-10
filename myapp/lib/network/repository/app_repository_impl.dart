@@ -1,4 +1,5 @@
 
+import 'package:myapp/models/event.dart';
 import 'package:myapp/models/user.dart';
 import 'package:myapp/network/base/base_error.dart';
 import 'package:myapp/network/base/base_response.dart';
@@ -15,5 +16,11 @@ class AppStorageRepository implements AppRepository {
   Future<BaseResponse<User>> login({required String p_email, required String p_password}) {
     // TODO: implement login
     return webApi.login(p_email: p_email, p_password: p_password).catchError(BaseErrorHandling().onError);
+  }
+
+  @override
+  Future<BaseResponse<List<Event>>> getListEvent() {
+    // TODO: implement getListEvent
+    return webApi.getListEvent().catchError(BaseErrorHandling().onError);
   }
 }

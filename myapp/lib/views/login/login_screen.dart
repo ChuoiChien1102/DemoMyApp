@@ -8,6 +8,8 @@ import 'package:myapp/component/text_field/app_textfield.dart';
 import 'package:myapp/constant/app_colors.dart';
 import 'package:myapp/constant/app_icons.dart';
 import 'package:myapp/constant/constant.dart';
+import 'package:myapp/shared/app_manager.dart';
+import 'package:myapp/shared/app_route.dart';
 import 'package:myapp/theme/app_theme.dart';
 import 'package:myapp/view_models/login_cubit.dart';
 
@@ -32,7 +34,7 @@ class _LoginScreenState extends State<LoginScreen> {
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [_buildLayoutInput(context), _buildLoginSuccess(context)],
+            children: [_buildLayoutInput(context), _buildCallAPI(context)],
           ),
         ),
       ),
@@ -104,7 +106,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 .text_16_600
                 .copyWith(color: AppColors.textWhite),
             size: AppButtonSize.middle,
-            // controller: _loginController,
             background: AppColors.bgPick,
             onPressed: () {
               if (_emailController.text.isEmpty) {
@@ -153,10 +154,10 @@ class _LoginScreenState extends State<LoginScreen> {
     ]);
   }
 
-  Widget _buildLoginSuccess(BuildContext context) {
+  Widget _buildCallAPI(BuildContext context) {
     return BlocConsumer<LoginCubit, LoginState>(
       bloc: Get.find<LoginCubit>(),
-      listener: (context, state) {
+      listener: (context, state) async {
         if (state is LoginInProgress) {
           EasyLoading.show(status: 'Loading...');
           return;
@@ -172,10 +173,13 @@ class _LoginScreenState extends State<LoginScreen> {
         if (state is LoginSuccess) {
           final response = state.dataResponse;
           if (response!.error_code == ResponseStatus.success) {
+            await Get.find<AppManager>().saveToken(token: response.data.token);
             AppDialog.show(
               globalManager.navigatorKey.currentContext!,
               msg: 'Login success!',
-              okHandler: () async {},
+              okHandler: () async {
+                Get.toNamed(AppRoute.home.name!);
+              },
             );
           } else {
             Get.snackbar("Error", response.message.toString());

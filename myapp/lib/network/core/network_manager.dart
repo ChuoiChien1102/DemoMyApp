@@ -56,7 +56,7 @@ extension BaseDioExtension on Dio {
     try {
       // options.headers.addAll({'tokendev': tokenDev});
       final token = await Get.find<AppManager>().getToken();
-      if (token != null) {
+      if (token != null && token != "") {
         options.headers.addAll({'Authorization': 'Bearer $token'});
         log('token: Bearer $token');
       }
