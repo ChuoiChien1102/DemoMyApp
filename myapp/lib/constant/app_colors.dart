@@ -158,4 +158,5 @@ class AppColors {
   static const Color bgGrey223 = Color(0x00000000);
   static const Color bgArea = Color(0xFF1CC49B);
   static const Color shadow = Color(0xFF4C4B5E);
+  static const Color bgPick = Color(0xFFEF1966);
 }

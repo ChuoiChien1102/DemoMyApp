@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -22,7 +21,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final GlobalManager globalManager = Get.find();
   final AppTextFieldController _emailController = AppTextFieldController();
   final AppTextFieldController _passwordController = AppTextFieldController();
-  final bool _showPass = false;
+  bool _showPass = false;
   String? _errorEmail;
   String? _errorPass;
 
@@ -33,36 +32,7 @@ class _LoginScreenState extends State<LoginScreen> {
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildLayoutInput(context),
-              _buildLoginSuccess(context)
-            ],
-          ),
-        ),
-      ),
-      bottomNavigationBar: InkWell(
-        onTap: () {},
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                'Bạn chưa có tài khoản?',
-                style: AppTheme.of(context)
-                    .text_12_700
-                    .copyWith(color: AppColors.mainColor),
-              ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: Text(
-                  'Đăng ký',
-                  style: AppTheme.of(context)
-                      .text_12_700
-                      .copyWith(color: AppColors.textPrimary),
-                ),
-              )
-            ],
+            children: [_buildLayoutInput(context), _buildLoginSuccess(context)],
           ),
         ),
       ),
@@ -71,12 +41,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget _buildLayoutInput(BuildContext context) {
     return Stack(children: [
-      // Image.asset(
-      //   AppImages.imgBgLogin,
-      //   fit: BoxFit.fill,
-      //   height: 340,
-      //   width: double.infinity,
-      // ),
       Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
@@ -85,15 +49,16 @@ class _LoginScreenState extends State<LoginScreen> {
             controller: _emailController,
             prefixIconAssetPath: AppIcons.icEmail,
             hintText: 'Email',
+            style: AppTextFieldStyle.outline,
             errorText: _errorEmail,
+            // errorColor: AppColors.textRed,
             hintStyle: AppTheme.of(context)
                 .text_16_400
                 .copyWith(color: AppColors.mainGreyColor),
             textStyle: AppTheme.of(context)
                 .text_16_400
                 .copyWith(color: AppColors.textGray),
-            // inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-            // keyboardType: TextInputType.number,
+            onChanged: (value) {},
           ),
           const SizedBox(height: 18),
           AppTextField(
@@ -103,14 +68,21 @@ class _LoginScreenState extends State<LoginScreen> {
             suffixIconAssetPath:
                 _showPass ? AppIcons.icEye : AppIcons.icEyeClose,
             hintText: 'Password',
+            style: AppTextFieldStyle.outline,
             errorText: _errorPass,
+            // errorColor: AppColors.textRed,
             hintStyle: AppTheme.of(context)
                 .text_16_400
                 .copyWith(color: AppColors.mainGreyColor),
             textStyle: AppTheme.of(context)
                 .text_16_400
                 .copyWith(color: AppColors.textGray),
-            suffixIconOnTap: () {},
+            suffixIconOnTap: () {
+              setState(() {
+                _showPass = !_showPass;
+              });
+            },
+            onChanged: (value) {},
           ),
           const SizedBox(height: 20),
           InkWell(
@@ -118,25 +90,63 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
-                "Quên mật khẩu ?",
+                "Forgot password ?",
                 style: AppTheme.of(context)
-                    .text_16_400
-                    .copyWith(color: AppColors.textGrey12),
+                    .text_16_500
+                    .copyWith(color: AppColors.textFlag2),
               ),
             ),
           ),
           const SizedBox(height: 20),
           AppButton(
-            label: 'ĐĂNG NHẬP',
+            label: 'LOGIN',
             textStyle: AppTheme.of(context)
                 .text_16_600
                 .copyWith(color: AppColors.textWhite),
             size: AppButtonSize.middle,
-            isFullWidth: true,
-            background: AppColors.mainColor,
+            // controller: _loginController,
+            background: AppColors.bgPick,
             onPressed: () {
-              Get.find<LoginCubit>().login(p_email: _emailController.text, p_password: _passwordController.text);
+              if (_emailController.text.isEmpty) {
+                setState(() {
+                  _errorEmail = "Email is required";
+                });
+                return;
+              }
+              if (_passwordController.text.isEmpty) {
+                setState(() {
+                  _errorPass = "Password is required";
+                });
+                return;
+              }
+              Get.find<LoginCubit>().login(
+                  p_email: _emailController.text,
+                  p_password: _passwordController.text);
             },
+          ),
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'Already have account?',
+                  style: AppTheme.of(context)
+                      .text_12_700
+                      .copyWith(color: AppColors.mainColor),
+                ),
+                const SizedBox(width: 10),
+                InkWell(
+                  onTap: () {},
+                  child: Text(
+                    'Register',
+                    style: AppTheme.of(context)
+                        .text_12_700
+                        .copyWith(color: AppColors.bgPick),
+                  ),
+                )
+              ],
+            ),
           ),
         ]),
       )
@@ -161,15 +171,12 @@ class _LoginScreenState extends State<LoginScreen> {
 
         if (state is LoginSuccess) {
           final response = state.dataResponse;
-          if (response!.error_code == 200) {
-             AppDialog.show(
-                  globalManager.navigatorKey.currentContext!,
-                  msg:
-                      'Login success!',
-                  okHandler: () async {
-                    
-                  },
-                );
+          if (response!.error_code == ResponseStatus.success) {
+            AppDialog.show(
+              globalManager.navigatorKey.currentContext!,
+              msg: 'Login success!',
+              okHandler: () async {},
+            );
           } else {
             Get.snackbar("Error", response.message.toString());
           }
@@ -180,5 +187,4 @@ class _LoginScreenState extends State<LoginScreen> {
       },
     );
   }
-
 }

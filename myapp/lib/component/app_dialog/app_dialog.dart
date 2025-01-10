@@ -10,7 +10,7 @@ class AppDialog extends StatefulWidget {
     this.title,
     this.logoTitle,
     this.msg,
-    this.okText = 'Đồng ý',
+    this.okText = 'Ok',
     this.cancelText,
     this.okHandler,
     this.cancelHandler,
@@ -37,7 +37,7 @@ class AppDialog extends StatefulWidget {
     BuildContext context, {
     String? title,
     String? msg,
-    String okText = 'Đồng ý',
+    String okText = 'Ok',
     String? cancelText,
     VoidCallback? okHandler,
     VoidCallback? cancelHandler,

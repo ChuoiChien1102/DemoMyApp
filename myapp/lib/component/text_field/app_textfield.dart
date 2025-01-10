@@ -410,7 +410,6 @@ class _AppTextFieldState extends State<AppTextField>
         hintStyle: _hintStyle,
         hintMaxLines: widget.maxLines,
         errorText: errorText,
-        errorStyle: AppTheme.of(context).textFieldError,
         errorMaxLines: 1,
         focusColor: AppColors.mainColor,
         focusedBorder: _focusedBorder,
